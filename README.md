@@ -1,8 +1,8 @@
-# Nom du Projet - Backend (Laravel)
+# Gestion-Projet - Backend (Laravel)
 
 ## Description
 
-Cette partie du projet est le backend de l'application, développé avec Laravel. Il gère l'API RESTful utilisée par le frontend pour les opérations côté serveur.
+Cette partie du projet est le backend de l'application, développé avec Laravel 11. Il gère l'API RESTful utilisée par le frontend pour les opérations côté serveur.
 
 ## Prérequis
 
