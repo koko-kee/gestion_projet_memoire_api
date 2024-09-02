@@ -8,7 +8,7 @@ Cette partie du projet est le backend de l'application, développé avec Laravel
 
 Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
-- PHP (version 8.0 ou plus)
+- PHP (version 8.3 ou plus)
 - Composer
 - MySQL ou un autre système de gestion de base de données compatible
 
@@ -18,7 +18,7 @@ Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
 
 1.1. Pour cloner le dépôt Git, ouvrez votre terminal ou votre invite de commandes et exécutez la commande suivante : 
 
-`git clone https://github.com/votre-nom-utilisateur/nom-du-repo-backend.git`.
+`https://github.com/koko-kee/gestion_projet_memoire_api.git`.
 
 1.2. Après le clonage, déplacez-vous dans le répertoire du projet en utilisant la commande suivante : `cd nom-du-repo-backend`.
 
