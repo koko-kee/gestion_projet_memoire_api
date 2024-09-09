@@ -16,19 +16,21 @@ class ProjetController extends Controller
 {
     public function inviteUser(Request $request, int $id)
     {
+        
         $user = User::where('email', $request->input('email'))->firstOrFail();
         $project = Projet::findOrFail($id);
-
+    
         $invitation = new Invitation([
             'id_utilisateur' => $user->id,
             'status' => 'en attente',
+            'id_projet' => $project->id, 
         ]);
-        
-        $invitation->id_projet = $project->id;
+    
         $invitation->save();
-        $user->notify(new UserInvitedNotification($project, $invitation));
+        $user->notify(new UserInvitedNotification($project));
         return response()->json($project, 201);
     }
+    
 
     public function getUserInProject(int $id)
     {
@@ -192,6 +194,26 @@ class ProjetController extends Controller
         return response()->json($projets);
     }
     
-    
+    public function editTask(Request $request, int $id)
+    {
+        $task = Tache::findOrFail($id);
+        $projet = $task->projet;
+
+        if ($projet->id_responsable != auth()->user()->id && $task->id_assigne != auth()->user()->id) {
+            return response()->json(['message' => 'Permission denied'], 403);
+        }
+
+        $request->validate([
+            'titre' => 'required',
+            'description' => 'required',
+            'priorite' => 'required|in:basse,moyenne,haute',
+            'date_echeance' => 'required|date',
+            'etat' => 'required|in:a faire,en cours,termine',
+        ]);
+
+        $task->update($request->all());
+
+        return response()->json($task, 200);
+    }
 
 }

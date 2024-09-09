@@ -7,6 +7,8 @@ use App\Http\Controllers\api\ProjetController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\api\TacheController;
+use App\Http\Controllers\api\NotificationController;
+
 
 Route::group([
     'middleware' => 'api',
@@ -53,11 +55,21 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/tasks/{task_id}/priority', [TacheController::class, 'changePriority'])->name('taches.changePriority');
     Route::post('/tasks/{task_id}/comments', [TacheController::class, 'addComment'])->name('taches.addComment');
     Route::get('/tasks/{task_id}/comments', [TacheController::class, 'getAllComments'])->name('taches.getAllComments');
-    Route::delete('/tasks/{task_id}/comments/{comment_id}', [TacheController::class, 'deleteComment'])->name('taches.deleteComment');
+    Route::delete('/tasks/comments/{comment_id}', [TacheController::class, 'deleteComment'])->name('taches.deleteComment');
     Route::post('/tasks/{task_id}/attachments', [TacheController::class, 'addAttachment'])->name('taches.addAttachment');
     Route::delete('/tasks/{task_id}/attachments/{attachment_id}', [TacheController::class, 'deleteAttachment'])->name('taches.deleteAttachment');
+    Route::get('/tasks/{id}', [TacheController::class, 'getTaskById'])->name('taches.getTaskById');
+    Route::put('/tasks/{id}', [TacheController::class, 'editTask'])->name('taches.editTask');
+    Route::put('/tasks/comments/{comment_id}', [TacheController::class, 'editComment'])->name('taches.editComment');
+
 
     Route::get('/projets/{id}/tasks', [TacheController::class, 'getTaskByProjet'])->name('taches.getTaskByProjet');
     Route::get('/my-assigned', [ProjetController::class, 'getMyAssignedProjects'])->name('projets.getMyAssignedProjects');
 
+    Route::get('/notifications/unread', [NotificationController::class, 'getUnreadNotifications']);
+    Route::get('/notifications', [NotificationController::class, 'getAllNotifications']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification']);
 });
+
