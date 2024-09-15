@@ -16,19 +16,24 @@ class ProjetController extends Controller
 {
     public function inviteUser(Request $request, int $id)
     {
-        
         $user = User::where('email', $request->input('email'))->firstOrFail();
         $project = Projet::findOrFail($id);
-    
-        $invitation = new Invitation([
+
+        $invitation = Invitation::create([
+            
+            'id' => Invitation::max('id') + 1,
             'id_utilisateur' => $user->id,
+            'id_projet' => $project->id,
             'status' => 'en attente',
-            'id_projet' => $project->id, 
+            'date_creation' => now(),
         ]);
-    
-        $invitation->save();
-        $user->notify(new UserInvitedNotification($project));
-        return response()->json($project, 201);
+
+        if($invitation != null){
+            
+            $user->notify(new UserInvitedNotification($project, $invitation));
+            return response()->json($project, 201);
+        }
+        return response()->json(['error' => 'Impossible d\'envoyer l\'invitation'], 500);
     }
     
 
@@ -180,7 +185,9 @@ class ProjetController extends Controller
         $userId = auth()->user()->id;
     
         $projets = Projet::whereHas('invitation', function ($query) use ($userId) {
-                $query->where('id_utilisateur', $userId);
+                $query->where('id_utilisateur', $userId)
+                ->where('status', 'accepter');
+                
             })
             ->with(['invitation.user'])
             ->get();
